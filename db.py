@@ -55,3 +55,8 @@ class S_PersonRelationship(BaseModel):
     started = pw.DateField()
     ended = pw.DateField(null=True)
     
+def init_db():
+    db.create_tables([
+        User, S_Country, S_City, S_School, S_School_Course, S_Sport,
+        S_Person, S_PersonRelationship
+        ])

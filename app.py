@@ -15,7 +15,7 @@ def create_app():
     def index():
         return render_template('home.html')
 
-    from . import s
+    import s
     app.register_blueprint(s.bp)
     
     return app
