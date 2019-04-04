@@ -7,7 +7,7 @@ import datetime
 bp = Blueprint('s', __name__, url_prefix='/s')
 
 def slugify(s):
-    return re.sub('[^A-Z0-9]+', '-', s).strip('-').title()
+    return re.sub('[^A-Za-z0-9]+', '-', s).strip('-').title()
 
 def canonical_person_slug(id):
     p = db.S_Person[id]
@@ -37,7 +37,7 @@ def detail(id, slug=None):
         abort(404)
     return render_template('detail.html', p=db.S_Person[id])
 
-@bp.route('/<slug:slug>-<int:id>/edit')
+@bp.route('/<slug:slug>-<int:id>/edit', methods=['GET', 'POST'])
 @bp.route('/<int:id>/edit')
 def detail_edit(id, slug=None):
     try:
@@ -52,11 +52,11 @@ def detail_edit(id, slug=None):
         flash('Successfully updated')
     return render_template('detail-edit.html', p=db.S_Person[id])
 
-@bp.route('/new/')
+@bp.route('/new/', methods=['GET', 'POST'])
 def new():
     if request.method == 'POST':
         pj = person_from_form()
         p = db.S_Person.create(**pj)
         flash('Successfully created')
-        return redirect(canonical_person_slug(p.id))
+        return redirect(canonical_person_slug(p.id) + '-' + str(p.id))
     return render_template('detail-edit.html', p=None)

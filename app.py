@@ -9,6 +9,8 @@ class SlugConverter(BaseConverter):
 def create_app():
     app = Flask(__name__)
 
+    app.secret_key = b'\xd2\xf7\xa6XtML&\xf6$t\xae&\xbc\xb3\xb2'
+
     app.url_map.converters['slug'] = SlugConverter
 
     @app.route('/')
