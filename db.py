@@ -49,6 +49,13 @@ class S_Person(BaseModel):
     mother = pw.DeferredForeignKey('s_person', null=True)
     is_hidden = pw.IntegerField(default=0)
 
+    @property
+    def full_name(self):
+        if self.nationality and self.nationality.name == 'China':
+            return self.last_name + ' ' + self.first_name
+        else:
+            return self.first_name + ' ' + self.last_name
+
 class S_PersonRelationship(BaseModel):
     person1 = pw.ForeignKeyField(S_Person)
     person2 = pw.ForeignKeyField(S_Person)
