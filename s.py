@@ -3,6 +3,7 @@ from flask import (
 import db
 import re
 import datetime
+from accounts import login_required
 
 bp = Blueprint('s', __name__, url_prefix='/s')
 
@@ -28,6 +29,7 @@ def person_from_form():
 
 @bp.route('/<slug:slug>-<int:id>/')
 @bp.route('/<int:id>/')
+@login_required
 def detail(id, slug=None):
     try:
         canonical_slug = canonical_person_slug(id)
@@ -39,6 +41,7 @@ def detail(id, slug=None):
 
 @bp.route('/<slug:slug>-<int:id>/edit', methods=['GET', 'POST'])
 @bp.route('/<int:id>/edit')
+@login_required
 def detail_edit(id, slug=None):
     try:
         canonical_slug = canonical_person_slug(id)
@@ -53,6 +56,7 @@ def detail_edit(id, slug=None):
     return render_template('detail-edit.html', p=db.S_Person[id])
 
 @bp.route('/new/', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'POST':
         pj = person_from_form()

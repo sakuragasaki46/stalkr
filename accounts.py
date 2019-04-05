@@ -12,6 +12,11 @@ def login_required(func):
         return func(*args, **kwargs)
     return wrapper
 
+def get_current_user():
+    user_id = session.get('user_id')
+    if user_id:
+        return db.User[user_id]
+
 bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 
 @bp.route('/login/', methods=['GET', 'POST'])
@@ -54,3 +59,9 @@ def create_account():
         else:
             flash(message)
     return render_template('create-account.html')
+
+@bp.route('/logout/')
+def logout():
+    session.clear()
+    flash('You were logged out.')
+    redirect(request.args.get('returnto', '/'))

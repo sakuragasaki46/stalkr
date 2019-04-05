@@ -43,10 +43,11 @@ class S_Person(BaseModel):
     wiki_page = pw.TextField(null=True)
     relationship_status = pw.IntegerField(default=0)
     sport = pw.ForeignKeyField(S_Sport, null=True)
-    favorite_color = pw.TextField(null=True)
+    #favorite_color = pw.TextField(null=True)
     deceased_date = pw.DateField(null=True)
-    father = pw.DeferredForeignKey('s_person', null=True)
-    mother = pw.DeferredForeignKey('s_person', null=True)
+    #father = pw.DeferredForeignKey('s_person', null=True)
+    #mother = pw.DeferredForeignKey('s_person', null=True)
+    owner_user = pw.ForeignKeyField(User) 
     is_hidden = pw.IntegerField(default=0)
 
     @property
