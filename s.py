@@ -3,7 +3,7 @@ from flask import (
 import db
 import re
 import datetime
-from accounts import login_required
+from accounts import get_current_user, login_required
 
 bp = Blueprint('s', __name__, url_prefix='/s')
 
@@ -60,7 +60,7 @@ def detail_edit(id, slug=None):
 def new():
     if request.method == 'POST':
         pj = person_from_form()
-        p = db.S_Person.create(**pj)
+        p = db.S_Person.create(**pj, owner_user=get_current_user())
         flash('Successfully created')
         return redirect(canonical_person_slug(p.id) + '-' + str(p.id))
     return render_template('detail-edit.html', p=None)

@@ -11,6 +11,9 @@
     <input type="text" name="last_name" value="{{ p.last_name or '' }}">
   </div>
   <div>
+    <label>Birthday:</label>
+    {% include "includes/birthday-input.html" %}
+  <div>
     <input type="submit" value="Save">
   </div>
 </form>

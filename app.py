@@ -1,5 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, g, render_template
 from werkzeug.routing import BaseConverter
+import datetime
 
 class SlugConverter(BaseConverter):
     def __init__(self, url_rule, *items):
@@ -16,6 +17,10 @@ def create_app():
     @app.route('/')
     def index():
         return render_template('home.html')
+
+    @app.before_request
+    def inject_variables():
+        g.today = datetime.datetime.today()
 
     import s
     app.register_blueprint(s.bp)

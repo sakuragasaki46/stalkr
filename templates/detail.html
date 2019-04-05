@@ -4,6 +4,7 @@
 
 {% if p %}
 <h1>{{p.full_name}}</h1>
+<p>{{p.birthday_human()}}</p>
 {% else %}
 <p>Unknown Error</p>
 {% endif %}

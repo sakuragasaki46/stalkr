@@ -1,5 +1,6 @@
 import peewee as pw
 import datetime
+from utils import aiyad
 
 db = pw.SqliteDatabase('stalkr.sqlite')
 
@@ -56,6 +57,13 @@ class S_Person(BaseModel):
             return self.last_name + ' ' + self.first_name
         else:
             return self.first_name + ' ' + self.last_name
+
+    def birthday_human(self, age=True):
+        s = self.birthday.strftime('Born on %B %e, %Y')
+        if age:
+            s_age = ' (age {})'.format(aiyad(self.birthday)[0])
+            s += s_age
+        return s
 
 class S_PersonRelationship(BaseModel):
     person1 = pw.ForeignKeyField(S_Person)
