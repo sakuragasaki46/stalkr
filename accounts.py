@@ -12,24 +12,45 @@ def login_required(func):
         return func(*args, **kwargs)
     return wrapper
 
-def do_client_auth(username, password):
-    try:
-        user = db.User.get(db.User.username == username)
-    except db.User.DoesNotExist:
-        return 'No user called %r exists.' % username
-    if not check_password_hash(user.password, password):
-        return 'Incorrect password.'
-    return 'ok'
-
 bp = Blueprint('accounts', __name__, url_prefix='/accounts')
 
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        message = do_client_auth(request.form.get('username'), request.form.get('password'))
-        if message == 'ok':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        message = None
+        try:
+            user = db.User.get(db.User.username == username)
+        except db.User.DoesNotExist:
+            message = 'No user called %r exists.' % username
+        if not check_password_hash(user.password, password):
+            message = 'Incorrect password.'
+        if not message:
+            session['user_id'] = user.id
             returnto = request.args.get('returnto', '/')
             return redirect(returnto)
         else:
             flash(message)
     return render_template('login.html')
+
+@bp.route('/create-2032/', methods=['GET', 'POST'])
+def create_account():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        message = None
+        if password != confirm_password:
+            message = 'Password mismatch.'
+        try:
+            user = db.User.create(username=username, password=generate_password_hash(password))
+        except db.pw.IntegrityError:
+            message = 'An user called %r already exists.' % username
+        if not message:
+            session['user_id'] = user.id
+            returnto = request.args.get('returnto', '/')
+            return redirect(returnto)
+        else:
+            flash(message)
+    return render_template('create-account.html')

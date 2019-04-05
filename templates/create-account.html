@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>
+  <strong>Warning:</strong> you are about to create an account for The Stalking Network.
+  Keep in mind that you cannot copy, redistribute, divulgate or otherwise share in any form 
+  the content on this site. This is extremely sensitive data.
+</p>
+
+<form method="POST">
+  <div>
+    <label for="username">Username:</label>
+    <input type="text" name="username">
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" name="password">
+  </div>
+  <div>
+    <label for="confirm_password">Confirm password:</label>
+    <input type="password" name="confirm_password">
+  </div>
+  <input type="submit" value="Log in">
+</form>
+
+{% endblock %}
